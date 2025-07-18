@@ -1,0 +1,25 @@
+{
+    "name": "plan2net/form-rate-limiter",
+    "description": "Rate limiting for TYPO3 form framework using Symfony RateLimiter component",
+    "type": "typo3-cms-extension",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Oliver Gassner plan2net GmbH <og@plan2.net>"
+        }
+    ],
+    "require": {
+        "typo3/cms-core": "^12.4 || ^13.4",
+        "typo3/cms-form": "^12.4 || ^13.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Plan2net\\FormRateLimiter\\": "Classes/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "form_rate_limiter"
+        }
+    }
+}

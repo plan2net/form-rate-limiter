@@ -1,0 +1,20 @@
+# cat=basic/enable; type=boolean; label=Enable Rate Limiting: Enable/disable rate limiting globally for all forms
+enabled = 1
+
+# cat=basic/options; type=options[Per Form=per_form,Global (All Forms)=global]; label=Rate Limiting Mode: Apply rate limiting per individual form or globally across all forms
+limitingMode = per_form
+
+# cat=basic/int+; type=int+; label=Maximum Attempts: Number of form submissions allowed per time interval
+limit = 5
+
+# cat=basic/string; type=string; label=Time Interval: Time interval (e.g., "15 minutes", "1 hour", "30 seconds")
+interval = 15 minutes
+
+# cat=security/string; type=string; label=Whitelisted IP Addresses: Comma-separated list of IP addresses that bypass rate limiting (e.g., 127.0.0.1, 192.168.1.*)
+whitelistIps = 
+
+# cat=security/string; type=string; label=Blacklisted IP Addresses: Comma-separated list of IP addresses that are completely blocked (e.g., 10.0.0.1, 192.168.2.*)
+blacklistIps = 
+
+# cat=logging/enable; type=boolean; label=Enable Logging: Log rate limiting events for monitoring and debugging
+enableLogging = 0
