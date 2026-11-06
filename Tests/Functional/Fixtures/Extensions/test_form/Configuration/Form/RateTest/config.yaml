@@ -1,0 +1,7 @@
+name: plan2net/rate-test
+label: 'Form rate limiter test forms'
+priority: 100
+
+persistenceManager:
+  allowedExtensionPaths:
+    100: 'EXT:test_form/Resources/Private/Forms/'

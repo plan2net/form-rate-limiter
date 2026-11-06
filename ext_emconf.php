@@ -14,8 +14,8 @@ $EM_CONF['form_rate_limiter'] = [
     'constraints' => [
         'depends' => [
             'php' => '8.2.0-8.5.99',
-            'typo3' => '12.4.0-13.99.99',
-            'form' => '12.4.0-13.99.99',
+            'typo3' => '12.4.0-14.99.99',
+            'form' => '12.4.0-14.99.99',
         ],
         'conflicts' => [],
         'suggests' => [],
