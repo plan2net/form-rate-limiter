@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="EXT:form_rate_limiter/Resources/Private/Language/locallang.xlf" product-name="form_rate_limiter">
+        <body>
+            <trans-unit id="tooManyRequests.title">
+                <source>Too many submissions</source>
+                <target>Zu viele Übermittlungen</target>
+            </trans-unit>
+            <trans-unit id="tooManyRequests.message">
+                <source>Too many submissions of this form. Please try again later.</source>
+                <target>Zu viele Übermittlungen dieses Formulars. Bitte versuchen Sie es später erneut.</target>
+            </trans-unit>
+            <trans-unit id="tooManyRequests.retryAfter">
+                <source>Too many submissions of this form. Please try again in %d seconds.</source>
+                <target>Zu viele Übermittlungen dieses Formulars. Bitte versuchen Sie es in %d Sekunden erneut.</target>
+            </trans-unit>
+            <trans-unit id="forbidden.title">
+                <source>Submission blocked</source>
+                <target>Übermittlung gesperrt</target>
+            </trans-unit>
+            <trans-unit id="forbidden.message">
+                <source>Submissions from your network are not allowed.</source>
+                <target>Übermittlungen aus Ihrem Netzwerk sind nicht erlaubt.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

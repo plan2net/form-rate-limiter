@@ -11,18 +11,36 @@ use TYPO3\CMS\Core\Error\PageErrorHandler\PageErrorHandlerInterface;
 use TYPO3\CMS\Core\Error\PageErrorHandler\PageErrorHandlerNotConfiguredException;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\CMS\Core\Site\Entity\Site;
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final readonly class RateLimitResponseFactory
 {
+    private const LABELS = 'LLL:EXT:form_rate_limiter/Resources/Private/Language/locallang.xlf:';
+
+    public function __construct(
+        private LanguageServiceFactory $languageServiceFactory,
+    ) {
+    }
+
     public function tooManyRequests(ServerRequestInterface $request, string $formIdentifier, ?int $retryAfter = null): ResponseInterface
     {
+        $languageService = $this->getLanguageService($request);
         $message = null === $retryAfter
-            ? 'Too many submissions of this form. Please try again later.'
-            : sprintf('Too many submissions of this form. Please try again in %d seconds.', $retryAfter);
+            ? $languageService->sL(self::LABELS . 'tooManyRequests.message')
+            : sprintf($languageService->sL(self::LABELS . 'tooManyRequests.retryAfter'), $retryAfter);
 
-        $response = $this->create($request, 429, 'Too many submissions', $message, $formIdentifier, $retryAfter);
+        $response = $this->create(
+            $request,
+            429,
+            $languageService->sL(self::LABELS . 'tooManyRequests.title'),
+            $message,
+            $formIdentifier,
+            $retryAfter
+        );
         if (null !== $retryAfter) {
             $response = $response->withHeader('Retry-After', (string) $retryAfter);
         }
@@ -32,14 +50,25 @@ final readonly class RateLimitResponseFactory
 
     public function forbidden(ServerRequestInterface $request, string $formIdentifier): ResponseInterface
     {
+        $languageService = $this->getLanguageService($request);
+
         return $this->create(
             $request,
             403,
-            'Submission blocked',
-            'Submissions from your network are not allowed.',
+            $languageService->sL(self::LABELS . 'forbidden.title'),
+            $languageService->sL(self::LABELS . 'forbidden.message'),
             $formIdentifier,
             null
         );
+    }
+
+    private function getLanguageService(ServerRequestInterface $request): LanguageService
+    {
+        $siteLanguage = $request->getAttribute('language');
+
+        return $siteLanguage instanceof SiteLanguage
+            ? $this->languageServiceFactory->createFromSiteLanguage($siteLanguage)
+            : $this->languageServiceFactory->create('default');
     }
 
     private function create(

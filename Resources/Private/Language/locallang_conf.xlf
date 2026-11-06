@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="EXT:form_rate_limiter/Resources/Private/Language/locallang_conf.xlf" product-name="form_rate_limiter">
+        <body>
+            <trans-unit id="enabled">
+                <source>Enable rate limiting: Turn rate limiting on or off for all forms</source>
+            </trans-unit>
+            <trans-unit id="limitingMode">
+                <source>Rate limiting mode: Count submissions per form or across all forms</source>
+            </trans-unit>
+            <trans-unit id="limitingMode.perForm">
+                <source>Per form</source>
+            </trans-unit>
+            <trans-unit id="limitingMode.global">
+                <source>Global (all forms)</source>
+            </trans-unit>
+            <trans-unit id="limit">
+                <source>Maximum submissions: Completed submissions allowed per address and time interval</source>
+            </trans-unit>
+            <trans-unit id="interval">
+                <source>Time interval: For example "15 minutes", "1 hour", "30 seconds"</source>
+            </trans-unit>
+            <trans-unit id="whitelistIps">
+                <source>Allowed IP addresses: Comma-separated addresses that are never limited (e.g. 127.0.0.1, 192.168.1.*)</source>
+            </trans-unit>
+            <trans-unit id="blacklistIps">
+                <source>Blocked IP addresses: Comma-separated addresses that may not submit forms at all (e.g. 10.0.0.1, 192.168.2.*)</source>
+            </trans-unit>
+            <trans-unit id="enableLogging">
+                <source>Enable logging: Log blocked and rejected submissions</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

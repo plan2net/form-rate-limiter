@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="EXT:form_rate_limiter/Resources/Private/Language/locallang.xlf" product-name="form_rate_limiter">
+        <body>
+            <trans-unit id="tooManyRequests.title">
+                <source>Too many submissions</source>
+            </trans-unit>
+            <trans-unit id="tooManyRequests.message">
+                <source>Too many submissions of this form. Please try again later.</source>
+            </trans-unit>
+            <trans-unit id="tooManyRequests.retryAfter">
+                <source>Too many submissions of this form. Please try again in %d seconds.</source>
+            </trans-unit>
+            <trans-unit id="forbidden.title">
+                <source>Submission blocked</source>
+            </trans-unit>
+            <trans-unit id="forbidden.message">
+                <source>Submissions from your network are not allowed.</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

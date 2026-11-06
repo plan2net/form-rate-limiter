@@ -125,6 +125,18 @@ final class FormSubmissionRateLimitTest extends FunctionalTestCase
     }
 
     #[Test]
+    public function rejectionIsTranslatedIntoTheSiteLanguage(): void
+    {
+        $this->writeSiteConfiguration('de_AT.UTF-8');
+        $this->completeForm();
+
+        $response = $this->completeForm();
+
+        self::assertSame(429, $response->getStatusCode());
+        self::assertStringContainsString('Zu viele Übermittlungen', (string) $response->getBody());
+    }
+
+    #[Test]
     public function eachFormHasItsOwnBudgetPerForm(): void
     {
         $this->completeForm('/');

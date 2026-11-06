@@ -1,20 +1,20 @@
-# cat=basic/enable; type=boolean; label=Enable Rate Limiting: Enable/disable rate limiting globally for all forms
+# cat=basic/enable; type=boolean; label=LLL:EXT:form_rate_limiter/Resources/Private/Language/locallang_conf.xlf:enabled
 enabled = 1
 
-# cat=basic/options; type=options[Per Form=per_form,Global (All Forms)=global]; label=Rate Limiting Mode: Apply rate limiting per individual form or globally across all forms
+# cat=basic/options; type=options[LLL:EXT:form_rate_limiter/Resources/Private/Language/locallang_conf.xlf:limitingMode.perForm=per_form,LLL:EXT:form_rate_limiter/Resources/Private/Language/locallang_conf.xlf:limitingMode.global=global]; label=LLL:EXT:form_rate_limiter/Resources/Private/Language/locallang_conf.xlf:limitingMode
 limitingMode = per_form
 
-# cat=basic/int+; type=int+; label=Maximum Attempts: Number of form submissions allowed per time interval
+# cat=basic/int+; type=int+; label=LLL:EXT:form_rate_limiter/Resources/Private/Language/locallang_conf.xlf:limit
 limit = 5
 
-# cat=basic/string; type=string; label=Time Interval: Time interval (e.g., "15 minutes", "1 hour", "30 seconds")
+# cat=basic/string; type=string; label=LLL:EXT:form_rate_limiter/Resources/Private/Language/locallang_conf.xlf:interval
 interval = 15 minutes
 
-# cat=security/string; type=string; label=Whitelisted IP Addresses: Comma-separated list of IP addresses that bypass rate limiting (e.g., 127.0.0.1, 192.168.1.*)
-whitelistIps = 
+# cat=security/string; type=string; label=LLL:EXT:form_rate_limiter/Resources/Private/Language/locallang_conf.xlf:whitelistIps
+whitelistIps =
 
-# cat=security/string; type=string; label=Blacklisted IP Addresses: Comma-separated list of IP addresses that are completely blocked (e.g., 10.0.0.1, 192.168.2.*)
-blacklistIps = 
+# cat=security/string; type=string; label=LLL:EXT:form_rate_limiter/Resources/Private/Language/locallang_conf.xlf:blacklistIps
+blacklistIps =
 
-# cat=logging/enable; type=boolean; label=Enable Logging: Log rate limiting events for monitoring and debugging
+# cat=logging/enable; type=boolean; label=LLL:EXT:form_rate_limiter/Resources/Private/Language/locallang_conf.xlf:enableLogging
 enableLogging = 0
