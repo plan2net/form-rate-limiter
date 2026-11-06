@@ -114,17 +114,6 @@ final class FormSubmissionRateLimitTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function leadingNumericFormKeyDoesNotBypassTheBlacklist(): void
-    {
-        $firstPage = $this->requestPage();
-        $this->configureRateLimiter(['blacklistIps' => '127.0.0.1']);
-
-        $response = $this->submitForResponse($firstPage, ['name' => 'Jane'], 1, ['tx_form_formframework[1][x]' => '1']);
-
-        self::assertSame(403, $response->getStatusCode());
-    }
-
-    #[Test]
     public function rejectionIsTranslatedIntoTheSiteLanguage(): void
     {
         $this->writeSiteConfiguration('de_AT.UTF-8');
@@ -200,6 +189,19 @@ final class FormSubmissionRateLimitTest extends FunctionalTestCase
         $this->configureRateLimiter(['whitelistIps' => '127.0.0.1', 'blacklistIps' => '127.0.0.1']);
 
         $response = $this->submitForResponse($firstPage, ['name' => 'Jane'], 1);
+
+        self::assertSame(403, $response->getStatusCode());
+    }
+
+    #[Test]
+    public function formDataInTheQueryStringDoesNotBypassTheBlacklist(): void
+    {
+        $firstPage = $this->requestPage();
+        $this->configureRateLimiter(['blacklistIps' => '127.0.0.1']);
+        [$action, $parameters] = $this->buildSubmission($firstPage, ['name' => 'Jane'], 1);
+
+        $request = (new InternalRequest('http://localhost' . $action . '&' . $parameters))->withMethod('POST');
+        $response = $this->executeFrontendSubRequest($request);
 
         self::assertSame(403, $response->getStatusCode());
     }
@@ -297,6 +299,24 @@ final class FormSubmissionRateLimitTest extends FunctionalTestCase
      */
     private function submitForResponse(string $html, array $fields, int $targetPageIndex, array $leadingParameters = []): ResponseInterface
     {
+        [$action, $parameters] = $this->buildSubmission($html, $fields, $targetPageIndex, $leadingParameters);
+
+        $request = (new InternalRequest('http://localhost' . $action))
+            ->withMethod('POST')
+            ->withHeader('Content-Type', 'application/x-www-form-urlencoded');
+        $request->getBody()->write($parameters);
+
+        return $this->executeFrontendSubRequest($request);
+    }
+
+    /**
+     * @param array<string, string> $fields
+     * @param array<string, string> $leadingParameters
+     *
+     * @return array{string, string} the form action and the encoded parameters
+     */
+    private function buildSubmission(string $html, array $fields, int $targetPageIndex, array $leadingParameters = []): array
+    {
         $document = new \DOMDocument();
         libxml_use_internal_errors(true);
         $document->loadHTML($html);
@@ -322,11 +342,6 @@ final class FormSubmissionRateLimitTest extends FunctionalTestCase
         }
         $query[] = rawurlencode('tx_form_formframework[' . $formIdentifier . '][__currentPage]') . '=' . $targetPageIndex;
 
-        $request = (new InternalRequest('http://localhost' . $form->getAttribute('action')))
-            ->withMethod('POST')
-            ->withHeader('Content-Type', 'application/x-www-form-urlencoded');
-        $request->getBody()->write(implode('&', $query));
-
-        return $this->executeFrontendSubRequest($request);
+        return [$form->getAttribute('action'), implode('&', $query)];
     }
 }

@@ -10,6 +10,10 @@ services:
   Plan2net\FormRateLimiter\Configuration\RateLimiterSettings:
     factory: ['@Plan2net\FormRateLimiter\Configuration\RateLimiterSettingsFactory', 'create']
 
+  # Created by GeneralUtility::makeInstance() as an EXT:form hook in TYPO3 v12 and v13
+  Plan2net\FormRateLimiter\Form\RejectBlockedAddresses:
+    public: true
+
   Plan2net\FormRateLimiter\Form\RateLimitFinisher:
     public: true
     shared: false

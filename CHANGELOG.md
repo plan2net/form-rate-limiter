@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The budget is kept per form the form framework actually renders. A crafted extra form key in the POST data can no longer move a submission into another counter.
 - `Retry-After` and the "try again in" text give the seconds to wait. They gave the Unix timestamp of the retry time.
 - Blocked IP addresses get 403 Forbidden instead of 429 Too Many Requests.
+- Blocked IP addresses are checked where the form processes a submission. The check read only the POST body, so form data sent in the query string got past it.
 - An address on both lists is blocked, as the README always said. The allow list won.
 - An invalid setting (a misspelled interval, a limit of 0, an unknown mode) falls back to its default and logs a warning. A misspelled interval made every form submission fail.
 - The rejection page no longer shows the form identifier or a link to the TYPO3 exception documentation.
