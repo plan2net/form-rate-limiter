@@ -2,24 +2,87 @@
     "name": "plan2net/form-rate-limiter",
     "description": "Rate limiting for TYPO3 form framework using Symfony RateLimiter component",
     "type": "typo3-cms-extension",
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.plan2.net/",
     "authors": [
         {
-            "name": "Oliver Gassner plan2net GmbH <og@plan2.net>"
+            "name": "Oliver Gassner",
+            "email": "og@plan2.net",
+            "role": "Lead Developer"
+        },
+        {
+            "name": "Wolfgang Klinger",
+            "email": "wk@plan2.net",
+            "role": "Developer"
         }
     ],
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin",
+        "sort-packages": true,
+        "allow-plugins": {
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true
+        },
+        "audit": {
+            "block-insecure": false
+        }
+    },
     "require": {
+        "php": "^8.2",
+        "symfony/rate-limiter": "^6.4 || ^7.0",
         "typo3/cms-core": "^12.4 || ^13.4",
         "typo3/cms-form": "^12.4 || ^13.4"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.75",
+        "phpstan/phpstan": "^2.1",
+        "typo3/cms-fluid-styled-content": "^12.4 || ^13.4",
+        "typo3/testing-framework": "^8.2 || ^9"
     },
     "autoload": {
         "psr-4": {
             "Plan2net\\FormRateLimiter\\": "Classes/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Plan2net\\FormRateLimiter\\Tests\\": "Tests/"
+        }
+    },
+    "scripts": {
+        "test": [
+            ".Build/bin/phpunit -c phpunit.xml"
+        ],
+        "test:functional": [
+            ".Build/bin/phpunit -c phpunit-functional.xml"
+        ],
+        "phpstan": [
+            ".Build/bin/phpstan analyse --no-progress"
+        ],
+        "php-cs-fixer": [
+            "PHP_CS_FIXER_IGNORE_ENV=1 .Build/bin/php-cs-fixer fix --config=php-cs-fixer.config.php --dry-run --diff"
+        ],
+        "php-cs-fixer:fix": [
+            "PHP_CS_FIXER_IGNORE_ENV=1 .Build/bin/php-cs-fixer fix --config=php-cs-fixer.config.php"
+        ],
+        "qa": [
+            "@phpstan",
+            "@php-cs-fixer"
+        ],
+        "qa:fix": [
+            "@phpstan",
+            "@php-cs-fixer:fix"
+        ]
+    },
     "extra": {
         "typo3/cms": {
-            "extension-key": "form_rate_limiter"
+            "extension-key": "form_rate_limiter",
+            "version": "1.0.0",
+            "web-dir": ".Build/Web",
+            "Package": {
+                "providesPackages": {}
+            }
         }
     }
 }

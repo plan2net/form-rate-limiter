@@ -1,0 +1,6 @@
+/.idea
+/.Build
+/php-cs-fixer.json
+/composer.lock
+/var
+/.phpunit.cache

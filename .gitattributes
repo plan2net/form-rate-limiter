@@ -1,0 +1,9 @@
+/.gitattributes          export-ignore
+/.gitignore              export-ignore
+/.github/                export-ignore
+/CHANGELOG.md            export-ignore
+/Tests/                  export-ignore
+/php-cs-fixer.config.php export-ignore
+/phpstan.neon            export-ignore
+/phpunit.xml             export-ignore
+/phpunit-functional.xml  export-ignore

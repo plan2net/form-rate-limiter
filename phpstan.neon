@@ -1,0 +1,11 @@
+parameters:
+    level: 8
+    phpVersion:
+        min: 80200
+        max: 80599
+    paths:
+        - Classes
+        - Tests
+    excludePaths:
+        - .Build/*
+        - Tests/Functional/Fixtures/*
