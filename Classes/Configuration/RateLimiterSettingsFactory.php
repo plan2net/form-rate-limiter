@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Plan2net\FormRateLimiter\Configuration;
 
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 
 final readonly class RateLimiterSettingsFactory
 {
     public function __construct(
         private ExtensionConfiguration $extensionConfiguration,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -21,6 +23,6 @@ final readonly class RateLimiterSettingsFactory
             return new RateLimiterSettings();
         }
 
-        return RateLimiterSettings::fromArray(is_array($configuration) ? $configuration : []);
+        return RateLimiterSettings::fromArray(is_array($configuration) ? $configuration : [], $this->logger);
     }
 }

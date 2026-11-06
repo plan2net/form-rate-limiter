@@ -9,3 +9,12 @@ parameters:
     excludePaths:
         - .Build/*
         - Tests/Functional/Fixtures/*
+    ignoreErrors:
+        # DateInterval::createFromDateString() returns false on PHP 8.2 and throws
+        # DateMalformedIntervalStringException from 8.3 on; the stubs declare neither.
+        - identifier: class.notFound
+          message: '#DateMalformedIntervalStringException#'
+          path: Classes/Configuration/RateLimiterSettings.php
+        - identifier: catch.neverThrown
+          path: Classes/Configuration/RateLimiterSettings.php
+          reportUnmatched: false
