@@ -1,0 +1,103 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+      - 'fix/**'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: PHP ${{ matrix.php }} / TYPO3 ${{ matrix.typo3 }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4', '8.5']
+        typo3: ['^12.4', '^13.4', '^14.3']
+        exclude:
+          - { php: '8.4', typo3: '^12.4' }
+          - { php: '8.5', typo3: '^12.4' }
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: intl, mbstring, pdo_sqlite, json, xml
+          tools: composer:v2
+          coverage: none
+
+      - name: Cache Composer downloads
+        if: ${{ !env.ACT }}
+        uses: actions/cache@v5
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ matrix.php }}-${{ matrix.typo3 }}-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            composer-${{ matrix.php }}-${{ matrix.typo3 }}-
+            composer-${{ matrix.php }}-
+
+      - name: Pin TYPO3 version
+        run: composer require --no-update typo3/cms-core:"${{ matrix.typo3 }}"
+
+      - name: Install dependencies
+        env:
+          TYPO3_SKIP_ASSET_PUBLISH: '1'
+        run: composer update --no-interaction --no-progress --prefer-dist --with-all-dependencies
+
+      - name: Unit tests
+        run: .Build/bin/phpunit -c phpunit.xml
+
+      - name: Functional tests
+        run: .Build/bin/phpunit -c phpunit-functional.xml
+
+  composer-validate:
+    name: composer validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          coverage: none
+      - run: composer validate --no-check-publish
+
+  cs-fixer:
+    name: php-cs-fixer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, json
+          tools: composer:v2
+          coverage: none
+      - env:
+          TYPO3_SKIP_ASSET_PUBLISH: '1'
+        run: composer install --no-interaction --no-progress --prefer-dist
+      - run: composer php-cs-fixer
+
+  phpstan:
+    name: phpstan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, json
+          tools: composer:v2
+          coverage: none
+      - env:
+          TYPO3_SKIP_ASSET_PUBLISH: '1'
+        run: composer install --no-interaction --no-progress --prefer-dist
+      - run: composer phpstan
