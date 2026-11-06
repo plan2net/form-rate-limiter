@@ -1,0 +1,44 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Plan2net\FormRateLimiter\Form;
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Form\Domain\Model\FormElements\Page;
+use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
+
+/**
+ * Runs after FormRuntime::initialize() applied the variants, because a variant with
+ * finishers replaces the whole finisher list.
+ */
+final class AddRateLimitFinisher
+{
+    /**
+     * @param array<mixed> $requestArguments
+     */
+    public function afterInitializeCurrentPage(FormRuntime $formRuntime, ?Page $currentPage, ?Page $lastPage, array $requestArguments): ?Page
+    {
+        $this->prependTo($formRuntime);
+
+        return $currentPage;
+    }
+
+    private function prependTo(FormRuntime $formRuntime): void
+    {
+        $form = $formRuntime->getFormDefinition();
+        $finishers = $form->getFinishers();
+        if (($finishers[0] ?? null) instanceof RateLimitFinisher) {
+            return;
+        }
+
+        $rateLimitFinisher = GeneralUtility::makeInstance(RateLimitFinisher::class);
+        $rateLimitFinisher->setFinisherIdentifier('RateLimit');
+
+        $form->setOptions(['finishers' => []], true);
+        $form->addFinisher($rateLimitFinisher);
+        foreach ($finishers as $finisher) {
+            $form->addFinisher($finisher);
+        }
+    }
+}

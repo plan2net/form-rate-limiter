@@ -6,3 +6,10 @@ services:
 
   Plan2net\FormRateLimiter\:
     resource: '../Classes/*'
+
+  Plan2net\FormRateLimiter\Configuration\RateLimiterSettings:
+    factory: ['@Plan2net\FormRateLimiter\Configuration\RateLimiterSettingsFactory', 'create']
+
+  Plan2net\FormRateLimiter\Form\RateLimitFinisher:
+    public: true
+    shared: false

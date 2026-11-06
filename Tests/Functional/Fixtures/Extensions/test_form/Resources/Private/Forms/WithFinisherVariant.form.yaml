@@ -1,0 +1,43 @@
+identifier: withFinisherVariant
+label: 'With finisher variant'
+type: Form
+prototypeName: standard
+finishers:
+  -
+    identifier: Confirmation
+    options:
+      message: 'Thank you for your submission'
+variants:
+  -
+    identifier: replace-finishers
+    condition: 'traverse(formValues, "name") == "Jane"'
+    finishers:
+      -
+        identifier: Confirmation
+        options:
+          message: 'Sent through the variant'
+renderables:
+  -
+    identifier: page-1
+    type: Page
+    label: 'Step 1'
+    renderables:
+      -
+        identifier: name
+        type: Text
+        label: Name
+        validators:
+          -
+            identifier: NotEmpty
+  -
+    identifier: page-2
+    type: Page
+    label: 'Step 2'
+    renderables:
+      -
+        identifier: comment
+        type: Text
+        label: Comment
+        validators:
+          -
+            identifier: NotEmpty
