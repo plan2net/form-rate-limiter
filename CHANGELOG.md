@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-09
+
 ### Added
 
 - TYPO3 14.3 support, next to 12.4 and 13.4.
 - English and German labels for the rejection pages and the extension settings.
 - Unit and functional tests, PHPStan, php-cs-fixer and a CI matrix for PHP 8.2–8.5 and TYPO3 12.4–14.3.
+
+### Changed
+
+- Requires PHP 8.2 or newer.
 
 ### Fixed
 
@@ -23,3 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - An address on both lists is blocked, as the README always said. The allow list won.
 - An invalid setting (a misspelled interval, a limit of 0, an unknown mode) falls back to its default and logs a warning. A misspelled interval made every form submission fail.
 - The rejection page no longer shows the form identifier or a link to the TYPO3 exception documentation.
+
+[Unreleased]: https://github.com/plan2net/form-rate-limiter/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/plan2net/form-rate-limiter/compare/0.0.1...1.0.0
