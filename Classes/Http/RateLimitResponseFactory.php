@@ -31,7 +31,7 @@ final readonly class RateLimitResponseFactory
         $languageService = $this->getLanguageService($request);
         $message = null === $retryAfter
             ? $languageService->sL(self::LABELS . 'tooManyRequests.message')
-            : sprintf($languageService->sL(self::LABELS . 'tooManyRequests.retryAfter'), $retryAfter);
+            : $this->retryAfterMessage($languageService, $retryAfter);
 
         $response = $this->create(
             $request,
@@ -60,6 +60,15 @@ final readonly class RateLimitResponseFactory
             $formIdentifier,
             null
         );
+    }
+
+    private function retryAfterMessage(LanguageService $languageService, int $seconds): string
+    {
+        $minutes = max(1, (int) round($seconds / 60));
+        [$unit, $count] = $minutes < 60 ? ['minute', $minutes] : ['hour', (int) round($minutes / 60)];
+        $label = 1 === $count ? $unit : $unit . 's';
+
+        return sprintf($languageService->sL(self::LABELS . 'tooManyRequests.retryAfter.' . $label), $count);
     }
 
     private function getLanguageService(ServerRequestInterface $request): LanguageService

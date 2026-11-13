@@ -88,7 +88,7 @@ final class FormSubmissionRateLimitTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function rejectionTellsHowManySecondsToWait(): void
+    public function rejectionTellsHowLongToWait(): void
     {
         $this->completeForm();
 
@@ -99,7 +99,7 @@ final class FormSubmissionRateLimitTest extends FunctionalTestCase
         self::assertGreaterThan(0, (int) $retryAfter);
         // 15 minutes, plus one second because Symfony rounds the retry time up
         self::assertLessThanOrEqual(901, (int) $retryAfter);
-        self::assertStringContainsString('in ' . $retryAfter . ' seconds', (string) $response->getBody());
+        self::assertStringContainsString('in 15 minutes', (string) $response->getBody());
     }
 
     #[Test]

@@ -8,8 +8,17 @@
             <trans-unit id="tooManyRequests.message">
                 <source>Too many submissions of this form. Please try again later.</source>
             </trans-unit>
-            <trans-unit id="tooManyRequests.retryAfter">
-                <source>Too many submissions of this form. Please try again in %d seconds.</source>
+            <trans-unit id="tooManyRequests.retryAfter.minute">
+                <source>Too many submissions of this form. Please try again in one minute.</source>
+            </trans-unit>
+            <trans-unit id="tooManyRequests.retryAfter.minutes">
+                <source>Too many submissions of this form. Please try again in %d minutes.</source>
+            </trans-unit>
+            <trans-unit id="tooManyRequests.retryAfter.hour">
+                <source>Too many submissions of this form. Please try again in one hour.</source>
+            </trans-unit>
+            <trans-unit id="tooManyRequests.retryAfter.hours">
+                <source>Too many submissions of this form. Please try again in %d hours.</source>
             </trans-unit>
             <trans-unit id="forbidden.title">
                 <source>Submission blocked</source>

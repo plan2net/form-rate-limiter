@@ -10,7 +10,9 @@ use Plan2net\FormRateLimiter\Http\RateLimitResponseFactory;
 use Plan2net\FormRateLimiter\Tests\Functional\Fixtures\TooManyRequestsErrorHandler;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Site\Entity\Site;
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class RateLimitResponseFactoryTest extends FunctionalTestCase
@@ -32,7 +34,7 @@ final class RateLimitResponseFactoryTest extends FunctionalTestCase
             ],
             'fallback error page' => [
                 static fn (): ServerRequestInterface => new ServerRequest('http://localhost/', 'POST'),
-                'in 0 seconds',
+                'in one minute',
             ],
             'site error handler' => [
                 static fn (): ServerRequestInterface => (new ServerRequest('http://localhost/', 'POST'))
@@ -63,5 +65,33 @@ final class RateLimitResponseFactoryTest extends FunctionalTestCase
         self::assertSame(429, $response->getStatusCode());
         self::assertSame('0', $response->getHeaderLine('Retry-After'));
         self::assertStringContainsString($expectedBody, (string) $response->getBody());
+    }
+
+    /**
+     * @return array<string, array{int, string, string}>
+     */
+    public static function waitingTimes(): array
+    {
+        return [
+            'less than a minute' => [20, 'default', 'Please try again in one minute.'],
+            'a few minutes' => [130, 'default', 'Please try again in 2 minutes.'],
+            'almost an hour' => [3586, 'default', 'Please try again in one hour.'],
+            'more than an hour' => [7000, 'default', 'Please try again in 2 hours.'],
+            'minutes in German' => [600, 'de', 'Bitte versuchen Sie es in 10 Minuten erneut.'],
+            'an hour in German' => [3586, 'de', 'Bitte versuchen Sie es in einer Stunde erneut.'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('waitingTimes')]
+    public function tellsTheWaitInWholeMinutesOrHours(int $seconds, string $language, string $expectedText): void
+    {
+        $request = (new ServerRequest('http://localhost/', 'POST'))
+            ->withAttribute('language', new SiteLanguage(0, 'de' === $language ? 'de_AT.UTF-8' : 'en_US.UTF-8', new Uri('http://localhost/'), []));
+
+        $response = $this->get(RateLimitResponseFactory::class)->tooManyRequests($request, 'contact-1', $seconds);
+
+        self::assertStringContainsString($expectedText, (string) $response->getBody());
+        self::assertSame((string) $seconds, $response->getHeaderLine('Retry-After'));
     }
 }
