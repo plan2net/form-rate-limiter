@@ -38,6 +38,37 @@ A wrong value, such as a maximum of `0` or a misspelled interval, falls back to 
 
 The site's error handler for 429 or 403 is used if configured, otherwise TYPO3's error page in English or German. AJAX requests get JSON with `error`, `formIdentifier` and `retryAfter` (seconds).
 
+### Your own error page
+
+Add a handler for 429 (too many submissions) and 403 (blocked address) to the site configuration, as you would for 404. The status code stays the same.
+
+**A page of the site**, in its design and edited like any other page:
+
+```yaml
+# config/sites/<site>/config.yaml
+errorHandling:
+  -
+    errorCode: 429
+    errorHandler: Page
+    errorContentSource: 't3://page?uid=123'
+```
+
+The page cannot show how long to wait, so write the interval into its text ("in one hour at the latest") or say "later", and give another way to get in touch, such as a phone number.
+
+**A Fluid template** gets the message with the wait time as `{message}`:
+
+```yaml
+errorHandling:
+  -
+    errorCode: 429
+    errorHandler: Fluid
+    errorFluidTemplate: 'EXT:my_site/Resources/Private/Templates/Error/TooManyRequests.html'
+```
+
+**A PHP class** that implements `PageErrorHandlerInterface` (`errorHandler: PHP`, `errorPhpClassFQCN`) gets the same message as `$message`.
+
+The visitor's input is lost on the error page, unless the browser keeps it when they go back.
+
 ## Things to know
 
 - **Behind a proxy or load balancer**, set `$GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP']`, or all visitors share the proxy's count.
